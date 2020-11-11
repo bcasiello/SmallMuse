@@ -11,8 +11,7 @@ Class {
 BaselineOfSmallMuse >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ "Packages"
-		spec package: 'SmallMuse'.
-		spec group: 'default' with: #( 'FileDialog' ) ]
+		spec package: 'SmallMuse' ]
 ]
 
 { #category : #accessing }
