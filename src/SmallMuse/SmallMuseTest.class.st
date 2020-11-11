@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'muse'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #running }
@@ -17,7 +17,19 @@ SmallMuseTest >> setUp [
 
 { #category : #tests }
 SmallMuseTest >> testSMCommands [
-	self assert: 1 equals: 2.
+	| owner guest |
+	muse := SMWorldMock new.
+	muse startWorld: 'TestMuse' at: 'testmuse' on: 4242.
+	muse gravatars: false.
+	owner := muse users at: 0.
+	guest := muse users at: 1.
+	muse loggedInUsers at: 0 put: owner.
+	muse loggedInUsers at: 1 put: guest.
+	muse commandParser perform: 'hello' by: owner on: 0.
+	self
+		assert: SMWebSocketMock lastMessageSent
+		equals:
+			'<div class="row"><div class="text"><span class="nick">Owner: </span><span class="message">hello</span></div></div>'
 ]
 
 { #category : #tests }
@@ -90,10 +102,24 @@ SmallMuseTest >> testSMUser [
 
 { #category : #tests }
 SmallMuseTest >> testSMWebSocketHandler [
-	self assert: 1 equals: 2.
+	muse := SMWorldMock new.
+	muse startWorld: 'TestMuse' at: 'testmuse' on: 4242.
+	muse gravatars: false.
+	muse loginUser: (muse users at: 0) on: 0.
+	muse print: 'test' from: (muse users at: 0).
+	self assert: muse socketHandler class lastMessageSent equals: '<div class="row"><div class="text"><span class="nick">Owner: </span><span class="message">test</span></div></div>'.
+	muse pose: '''s nose is cold.' from: (muse users at: 0).	
+	self assert: muse socketHandler class lastMessageSent equals: '<div class="row"><div class="text"><span class="nick">Owner''s nose is cold.</span></div></div>'.
+
 ]
 
 { #category : #tests }
 SmallMuseTest >> testSMWorld [
-	self assert: 1 equals: 2.
+	muse := SMWorldMock new.
+	muse startWorld: 'TestMuse' at: 'testmuse' on: 4242.
+	muse gravatars: false.
+	muse move: (muse users at: 0) from: 1 to: 2 on: 0.
+	self assert: SMWebSocketMock lastMessageSent equals: '<span class="info">Exits: North (n)</span><br />'.
+	
+
 ]

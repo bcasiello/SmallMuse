@@ -19,7 +19,7 @@ Class {
 		'to',
 		'direction'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #accessing }

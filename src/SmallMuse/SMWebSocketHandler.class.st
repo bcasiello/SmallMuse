@@ -30,7 +30,7 @@ Class {
 	#instVars : [
 		'muse'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #running }

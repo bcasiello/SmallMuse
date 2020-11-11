@@ -26,7 +26,7 @@ Class {
 	#classVars : [
 		'Privileges'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #'instance creation' }

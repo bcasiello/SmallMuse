@@ -13,7 +13,7 @@ Class {
 		'contents',
 		'permissions'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #utilities }

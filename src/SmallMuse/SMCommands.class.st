@@ -28,7 +28,7 @@ Class {
 	#instVars : [
 		'muse'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #constants }
@@ -271,7 +271,7 @@ SMCommands >> register: arguments on: socket [
 
 { #category : #commands }
 SMCommands >> say: arguments on: socket [
-	muse print: ' ', arguments from: (muse loggedInUsers at: socket).
+	muse print: arguments from: (muse loggedInUsers at: socket).
 
 ]
 

@@ -18,7 +18,7 @@ Class {
 		'privilege',
 		'room'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #utilities }

@@ -14,7 +14,7 @@ Class {
 		'lock',
 		'value'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #initialization }

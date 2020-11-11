@@ -74,7 +74,7 @@ Class {
 		'gravatars',
 		'commandParser'
 	],
-	#category : #smallMuse
+	#category : #SmallMuse
 }
 
 { #category : #handlers }
