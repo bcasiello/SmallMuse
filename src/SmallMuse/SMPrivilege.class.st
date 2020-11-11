@@ -20,53 +20,73 @@ Class {
 	#name : #SMPrivilege,
 	#superclass : #Object,
 	#instVars : [
-		'name',
 		'level'
 	],
 	#classVars : [
-		'Privileges'
+		'privileges'
 	],
 	#category : #SmallMuse
 }
 
 { #category : #'instance creation' }
 SMPrivilege class >> architect [
-	^ self name: #architect level: 5
+	^ self new level: #architect
 ]
 
 { #category : #'instance creation' }
 SMPrivilege class >> builder [
-	^ self name: 'builder' level: 3
+	^ self new level: #builder
 ]
 
 { #category : #'instance creation' }
 SMPrivilege class >> coder [
-	^ self name: 'coder' level: 4
+	^ self new level: #coder
 ]
 
 { #category : #'instance creation' }
 SMPrivilege class >> guest [
-	^ self name: 'guest' level: 1
-]
-
-{ #category : #'instance creation' }
-SMPrivilege class >> name: privilegeName level: privilegeLevel [
-	^ self privileges at: privilegeName ifAbsentPut: [ self new name: privilegeName level: privilegeLevel ]
+	^ self new level: #guest
 ]
 
 { #category : #'instance creation' }
 SMPrivilege class >> owner [
-	^ self name: 'owner' level: 6
-]
-
-{ #category : #internal }
-SMPrivilege class >> privileges [
-	^ Privileges ifNil: [ Privileges := SmallDictionary new ]
+	^ self new level: #owner
 ]
 
 { #category : #'instance creation' }
 SMPrivilege class >> user [
-	^ self name: 'user' level: 2
+	^ self new level: #user
+]
+
+{ #category : #comparing }
+SMPrivilege >> < aLevel [
+	^ self class = aLevel class and: [ self value < aLevel value ]
+]
+
+{ #category : #comparing }
+SMPrivilege >> <= aLevel [
+	^ self class = aLevel class and: [ self value <= aLevel value ]
+]
+
+{ #category : #comparing }
+SMPrivilege >> = aLevel [
+	^ self class = aLevel class and: [ self value = aLevel value ]
+]
+
+{ #category : #comparing }
+SMPrivilege >> > aLevel [
+	^ self class = aLevel class and: [ self value > aLevel value ]
+]
+
+{ #category : #comparing }
+SMPrivilege >> >= aLevel [
+	^ self class = aLevel class and: [ self value >= aLevel value ]
+
+]
+
+{ #category : #comparing }
+SMPrivilege >> hash [
+	^ self class hash bitXor: self level hash
 ]
 
 { #category : #accessing }
@@ -75,12 +95,21 @@ SMPrivilege >> level [
 ]
 
 { #category : #accessing }
-SMPrivilege >> name [
-	^ name
+SMPrivilege >> level: aLevel [
+	level := aLevel
 ]
 
-{ #category : #accessing }
-SMPrivilege >> name: newName level: newLevel [
-	name := newName.
-	level := newLevel
+{ #category : #evaluating }
+SMPrivilege >> value [
+	self level = #guest     ifTrue: [ ^ 1 ].
+	self level = #user      ifTrue: [ ^ 2 ].
+	self level = #builder   ifTrue: [ ^ 3 ].
+	self level = #coder     ifTrue: [ ^ 4 ].
+	self level = #architect ifTrue: [ ^ 5 ].
+	self level = #owner     ifTrue: [ ^ 6 ]
+]
+
+{ #category : #comparing }
+SMPrivilege >> ~= aLevel [
+	^ self class ~= aLevel class or: [ self value ~= aLevel value ]
 ]

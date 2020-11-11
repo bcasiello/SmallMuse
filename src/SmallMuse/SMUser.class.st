@@ -63,8 +63,13 @@ SMUser >> initialize [
 ]
 
 { #category : #testing }
-SMUser >> isAllowedToPerform: selector [ 
-	^ self privilege level >= (SMCommands privilegeOf: selector) level
+SMUser >> isAllowedToPerform: selector [
+	| a b |
+	a := self privilege.
+	b := SMCommands privilegeOf: selector.
+	Transcript show: a printString.
+	Transcript show: b printString.
+	^ self privilege >= (SMCommands privilegeOf: selector)
 ]
 
 { #category : #accessing }
@@ -94,17 +99,12 @@ SMUser >> nick [
 
 { #category : #accessing }
 SMUser >> privilege [
-	^ SMPrivilege privileges at: privilege
+	^ privilege
 ]
 
 { #category : #accessing }
 SMUser >> privilege: aSmallMusePrivilege [
-	privilege := aSmallMusePrivilege name
-]
-
-{ #category : #accessing }
-SMUser >> privilegeOf: user [
-	^ user privilege
+	privilege := aSmallMusePrivilege.
 ]
 
 { #category : #accessing }

@@ -64,12 +64,11 @@ SmallMuseTest >> testSMPortal [
 
 { #category : #tests }
 SmallMuseTest >> testSMPrivilege [
-	self assert: SMPrivilege guest level < SMPrivilege user level.
-	self assert: SMPrivilege user level < SMPrivilege builder level.
-	self assert: SMPrivilege builder level < SMPrivilege coder level.
-	self assert: SMPrivilege coder level < SMPrivilege architect level.
-	self assert: SMPrivilege architect level < SMPrivilege owner level.
-
+	self assert: SMPrivilege guest     < SMPrivilege user.
+	self assert: SMPrivilege user      < SMPrivilege builder.
+	self assert: SMPrivilege builder   < SMPrivilege coder.
+	self assert: SMPrivilege coder     < SMPrivilege architect.
+	self assert: SMPrivilege architect < SMPrivilege owner
 ]
 
 { #category : #tests }
