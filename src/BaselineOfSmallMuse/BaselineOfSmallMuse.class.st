@@ -29,8 +29,10 @@ BaselineOfSmallMuse >> preload: loader package: packageSpec [
 			project: 'ZincHTTPComponents';
 		package: 'ConfigurationOfZincHTTPComponents';
 		load.
+		Transcript show: 'loaded zinc'.
 	(Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project
-		latestVersion load: 'WebSocket'
+		latestVersion load: 'WebSocket'.
+		Transcript show: 'loaded websocket'.
 ]
 
 { #category : #accessing }
