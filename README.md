@@ -2,7 +2,7 @@
 A Multi-User Shared Environment in SmallTalk
 
 ## Installation
-Installation with dependencies via Iceberg isn't working yet. In the meantime, you must explicitly load the dependencies for websockets and templates:
+Installation with dependencies via Iceberg isn't working yet. In the meantime, you must explicitly load the dependencies:
 
 ### Zinc WebSockets
 ```smalltalk
@@ -19,4 +19,12 @@ Gofer it
    smalltalkhubUser: 'NorbertHartl' project: 'Mustache';
    configuration;
    loadStable.
+```
+
+### PetitParser
+```smalltalk
+Gofer new
+    renggli: 'petit'; 
+    package: 'PetitParser';
+    load.
 ```
