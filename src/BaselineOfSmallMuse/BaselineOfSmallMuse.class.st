@@ -32,6 +32,11 @@ BaselineOfSmallMuse >> baseline: spec [
 
 ]
 
+{ #category : #actions }
+BaselineOfSmallMuse >> preload: loader package: packageSpec [
+	(Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
+]
+
 { #category : #accessing }
 BaselineOfSmallMuse >> projectClass [
 	^ MetacelloCypressBaselineProject
