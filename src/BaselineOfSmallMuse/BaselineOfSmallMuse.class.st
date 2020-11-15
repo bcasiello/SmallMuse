@@ -9,13 +9,14 @@ Class {
 
 { #category : #'as yet unclassified' }
 BaselineOfSmallMuse >> ZincHTTPComponents: spec [
-	[ spec
+	spec
 		project: 'ZincHTTPComponents'
 		with: [ spec
 				className: #ConfigurationOfZincHTTPComponents;
+				versionString: #stable;
 				repository:
 					'http://smalltalkhub.com/mc/SvenVanCaekenberghe/ZincHTTPComponents/main/';
-				loads: #('WebSocket') ] ]
+				loads: #('WebSocket') ]
 ]
 
 { #category : #baselines }
