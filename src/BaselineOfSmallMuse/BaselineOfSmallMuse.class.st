@@ -7,24 +7,12 @@ Class {
 	#category : #BaselineOfSmallMuse
 }
 
-{ #category : #'as yet unclassified' }
-BaselineOfSmallMuse >> ZincHTTPComponents: spec [
-	spec
-		project: 'ZincHTTPComponents'
-		with: [ spec
-				className: #ConfigurationOfZincHTTPComponents;
-				versionString: #stable;
-				repository:
-					'http://smalltalkhub.com/mc/SvenVanCaekenberghe/ZincHTTPComponents/main/';
-				loads: #('WebSocket') ]
-]
-
 { #category : #baselines }
 BaselineOfSmallMuse >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		"Dependencies"
-		self ZincHTTPComponents: spec.
+		self zincHTTPComponents: spec.
 
 		"Packages"
 		spec package: 'SmallMuse' with:  [ spec requires: #('ZincHTTPComponents') ] ]
@@ -46,4 +34,15 @@ BaselineOfSmallMuse >> preload: loader package: packageSpec [
 { #category : #accessing }
 BaselineOfSmallMuse >> projectClass [
 	^ MetacelloCypressBaselineProject
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfSmallMuse >> zincHTTPComponents: spec [
+	spec
+		project: 'ZincHTTPComponents'
+		with: [ spec
+				className: #ConfigurationOfZincHTTPComponents;
+				versionString: #stable;
+				repository:
+					'http://smalltalkhub.com/mc/SvenVanCaekenberghe/ZincHTTPComponents/main/']
 ]
