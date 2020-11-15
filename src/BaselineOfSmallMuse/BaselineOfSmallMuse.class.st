@@ -11,6 +11,8 @@ Class {
 BaselineOfSmallMuse >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
+		spec preLoadDoIt: #preload:package:.
+
 		"Dependencies"
 		self zincHTTPComponents: spec.
 
