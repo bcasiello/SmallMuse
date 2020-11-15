@@ -11,42 +11,12 @@ Class {
 BaselineOfSmallMuse >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
-		spec preLoadDoIt: #preload:package:.
-
-		"Dependencies"
-		self zincHTTPComponents: spec.
-
-		"Packages"
-		spec package: 'SmallMuse' with:  [ spec requires: #('ZincHTTPComponents') ] ]
+		spec package: 'SmallMuse' ]
 	
 
-]
-
-{ #category : #actions }
-BaselineOfSmallMuse >> preload: loader package: packageSpec [
-	Gofer new
-		smalltalkhubUser: 'SvenVanCaekenberghe'
-			project: 'ZincHTTPComponents';
-		package: 'ConfigurationOfZincHTTPComponents';
-		load.
-		Transcript show: 'loaded zinc'.
-	(Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project
-		latestVersion load: 'WebSocket'.
-		Transcript show: 'loaded websocket'.
 ]
 
 { #category : #accessing }
 BaselineOfSmallMuse >> projectClass [
 	^ MetacelloCypressBaselineProject
-]
-
-{ #category : #'as yet unclassified' }
-BaselineOfSmallMuse >> zincHTTPComponents: spec [
-	spec
-		project: 'ZincHTTPComponents'
-		with: [ spec
-				className: #ConfigurationOfZincHTTPComponents;
-				versionString: #stable;
-				repository:
-					'http://smalltalkhub.com/mc/SvenVanCaekenberghe/ZincHTTPComponents/main/']
 ]
