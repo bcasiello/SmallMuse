@@ -7,24 +7,11 @@ Class {
 	#category : #BaselineOfSmallMuse
 }
 
-{ #category : #'as yet unclassified' }
-BaselineOfSmallMuse >> ZincHTTPComponents: spec [
-	spec
-		project: 'ZincHTTPComponents'
-		with: [ spec
-			className: #ConfigurationOfZincHTTPComponents;
-			repository: 'http://smalltalkhub.com/mc/SvenVanCaekenberghe/ZincHTTPComponents/main/' ]
-]
-
 { #category : #baselines }
 BaselineOfSmallMuse >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ "Packages"
-		"Dependencies"
-		self ZincHTTPComponents: spec.
-		spec package: 'SmallMuse' with:  [ spec requires: #('ZincHTTPComponents') ] ]
-	
-
+		spec package: 'SmallMuse' ]
 ]
 
 { #category : #accessing }
