@@ -34,7 +34,13 @@ BaselineOfSmallMuse >> baseline: spec [
 
 { #category : #actions }
 BaselineOfSmallMuse >> preload: loader package: packageSpec [
-	(Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
+	Gofer new
+		smalltalkhubUser: 'SvenVanCaekenberghe'
+			project: 'ZincHTTPComponents';
+		package: 'ConfigurationOfZincHTTPComponents';
+		load.
+	(Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project
+		latestVersion load: 'WebSocket'
 ]
 
 { #category : #accessing }
