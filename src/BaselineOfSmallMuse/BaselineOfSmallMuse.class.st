@@ -10,13 +10,5 @@ Class {
 { #category : #baselines }
 BaselineOfSmallMuse >> baseline: spec [
 	<baseline>
-	spec for: #common do: [
-		spec package: 'SmallMuse' ]
-	
-
-]
-
-{ #category : #accessing }
-BaselineOfSmallMuse >> projectClass [
-	^ MetacelloCypressBaselineProject
+	spec for: #common do: [ spec package: 'SmallMuse' ]
 ]
