@@ -8,6 +8,7 @@ Class {
 		'id',
 		'name',
 		'owner',
+		'longName',
 		'description',
 		'exits',
 		'contents',
@@ -76,12 +77,23 @@ SMRoom >> id [
 SMRoom >> id: newId name: newName owner: newOwner [
 	id := newId.
 	name := newName.
+	longName := newName.
 	description := newName.
 	owner := newOwner.
 	exits := Dictionary new.
 	contents := Set new.
 	permissions := Set new.
 
+]
+
+{ #category : #accessing }
+SMRoom >> longName [
+	^ longName
+]
+
+{ #category : #accessing }
+SMRoom >> longName: anObject [
+	longName := anObject
 ]
 
 { #category : #accessing }

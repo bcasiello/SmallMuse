@@ -64,11 +64,6 @@ SMUser >> initialize [
 
 { #category : #testing }
 SMUser >> isAllowedToPerform: selector [
-	| a b |
-	a := self privilege.
-	b := SMCommands privilegeOf: selector.
-	Transcript show: a printString.
-	Transcript show: b printString.
 	^ self privilege >= (SMCommands privilegeOf: selector)
 ]
 

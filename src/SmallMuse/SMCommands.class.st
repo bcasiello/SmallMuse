@@ -38,7 +38,7 @@ SMCommands class >> architectCommands [
 
 { #category : #constants }
 SMCommands class >> builderCommands [
-	^ #( #dig:on:)
+	^ #( #makeRoom:on:)
 ]
 
 { #category : #constants }
@@ -175,6 +175,20 @@ SMCommands >> logout: ignored on: socket [
 	muse logoutUser: user on: socket
 ]
 
+{ #category : #commands }
+SMCommands >> makeRoom: arguments on: socket [
+	| words name direction reverse longname description |
+	words := self class tokenize: arguments.
+	words size ~= 5 ifTrue: [ 
+		^ muse sendPage: 'roomError.html' on: socket ].
+	name := words at: 1.
+	direction := words at: 2.
+	reverse := words at: 3.
+	longname := words at: 4.
+	description := words at: 5.
+	muse makeRoom: name direction: direction reverse: reverse longname: longname description: description on: socket
+]
+
 { #category : #accessing }
 SMCommands >> muse [
 	^ muse
@@ -219,13 +233,13 @@ SMCommands >> perform: command with: arguments by: user on: socket [
 	| actualCommand selector |
 	actualCommand := command ifEmpty: [ 'say'].
 	selector := (actualCommand , ':on:') asSymbol.
+	(self class canPerform: selector) ifFalse: [ 
+		muse print: 'I don''t know how to ''' , command , ' ', arguments, '''' on: socket.
+		^ self ].
 	(user isAllowedToPerform: selector) ifFalse: [ 
 		muse
 			print: 'You don''t have permission to ''' , command , ' ', arguments, ''''
 			on: socket.
-		^ self ].
-	(self class canPerform: selector) ifFalse: [ 
-		muse print: 'I don''t know how to ''' , command , ' ', arguments, '''' on: socket.
 		^ self ].
 	self perform: selector with: arguments with: socket
 ]
@@ -258,7 +272,7 @@ SMCommands >> register: arguments on: socket [
 		muse sendPage: 'nickInUse.html' on: socket.
 		^ nil ].
 	user := SMUser new
-		        id: muse counter next
+		        id: muse nextCounter
 		        nick: nick
 		        email: email
 		        password: password

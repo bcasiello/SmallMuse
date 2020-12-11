@@ -64,6 +64,7 @@ Class {
 	#name : #SMWorld,
 	#superclass : #Object,
 	#instVars : [
+		'mutex',
 		'users',
 		'rooms',
 		'loggedInUsers',
@@ -120,28 +121,38 @@ SMWorld >> homeDirectory [
 { #category : #initialization }
 SMWorld >> initWorld [
 	"Initialize the world with the owner, a guest, and two connected rooms."
+
 	| owner firstRoom secondRoom |
 	self gravatars: true.
 	owner := self
-		newUserWithNick: 'Owner'
-		email: 'bcasiello@gmail.com'
-		password: 'secret'
-		privilege: SMPrivilege owner.
+		         newUserWithNick: 'Owner'
+		         email: 'bcasiello@yahoo.com'
+		         password: 'secret'
+		         privilege: SMPrivilege owner.
 	self
 		newUserWithNick: 'Guest'
 		email: ''
 		password: ''
 		privilege: SMPrivilege guest.
-	firstRoom := self newRoomWithName: 'the Lobby' owner: owner.
-	firstRoom description: 'You are in a large room with ivory colored walls, many standing plants, and four columns surrounding a circular area with comfortable chairs arranged around a glass table. There is a gold chandelier above the table.'.
-	secondRoom := self newRoomWithName: 'the Backroom'  owner: owner.
-	secondRoom description: 'You are in a small, rectanguar room with a large table surrounded by several folding chairs. The table is littered with papers, coffee cups, napkins, and an empty donut box.'.
-	self newDoorFrom: firstRoom to: secondRoom direction: 'n' oppositeDirection: 's'.
+	firstRoom := self newRoomWithName: 'Lobby' owner: owner.
+	firstRoom longName: 'the Lobby'.
+	firstRoom description:
+		'You are in a large room with ivory colored walls, many standing plants, and four columns surrounding a circular area with comfortable chairs arranged around a glass table. There is a gold chandelier above the table.'.
+	secondRoom := self newRoomWithName: 'Backroom' owner: owner.
+	secondRoom longName: 'the Backroom'.
+	secondRoom description:
+		'You are in a small, rectanguar room with a large table surrounded by several folding chairs. The table is littered with papers, coffee cups, napkins, and an empty donut box.'.
+	self
+		newDoorFrom: firstRoom
+		to: secondRoom
+		direction: 'n'
+		oppositeDirection: 's'
 ]
 
 { #category : #initialization }
 SMWorld >> initialize [
 	super initialize.
+	mutex := Mutex new.
 	users := Dictionary new.
 	rooms := Dictionary new.
 	commandParser := SMCommands new muse: self.
@@ -185,7 +196,9 @@ SMWorld >> loginUser: user on: socket [
 	user room ifNil: [ user room: 2 ].
 	loggedInUsers at: socket put: user.
 	self saveWorld.
-	self user: user enterRoom: user room on: socket
+	self user: user enterRoom: user room on: socket.
+	socketHandler printWho.
+	socketHandler printRooms
 ]
 
 { #category : #handlers }
@@ -196,7 +209,22 @@ SMWorld >> logoff: socket [
 { #category : #handlers }
 SMWorld >> logoutUser: user on: socket [
 	socketHandler pose: ' has logged out.' from: user.
-	loggedInUsers removeKey: socket
+	loggedInUsers removeKey: socket.
+	socketHandler printWho.
+	socketHandler printRooms
+]
+
+{ #category : #handlers }
+SMWorld >> makeRoom: name direction: direction reverse: reverse longname: longname description: description on: socket [
+	| user currentRoom room |
+	user := loggedInUsers at: socket.
+	currentRoom := rooms at: user room.
+	room := self newRoomWithName: name owner: user.
+	room longName: longname.
+	room description: description.
+	self newDoorFrom: currentRoom to: room direction: direction oppositeDirection: reverse.
+	self move: user from: currentRoom id to: room id on: socket.
+	self saveWorld
 ]
 
 { #category : #handlers }
@@ -213,6 +241,7 @@ SMWorld >> move: user direction: direction on: socket [
 SMWorld >> move: user from: oldRoom to: newRoom on: socket [
 	self user: user exitRoom: oldRoom on: socket.
 	self user: user enterRoom: newRoom on: socket.
+	socketHandler printWho
 
 ]
 
@@ -247,6 +276,7 @@ SMWorld >> newRoomWithName: name owner: owner [
 	room := SMRoom new id: counter next name: name owner: owner id.
 	rooms at: room id put: room.
 	self saveWorld.
+	socketHandler printRooms.
 	^ room
 	
 ]
@@ -259,6 +289,11 @@ SMWorld >> newUserWithNick: nick email: email password: password privilege: priv
 	users at: user id put: user.
 	self saveWorld.
 	^ user.
+]
+
+{ #category : #accessing }
+SMWorld >> nextCounter [
+	mutex critical: [ ^ counter next ]
 ]
 
 { #category : #printing }
@@ -353,6 +388,7 @@ SMWorld >> setDelegates [
 
 { #category : #accessing }
 SMWorld >> startWorld: name at: location on: port [
+	counter := SMCounter new.
 	homeDirectory := location asFileReference isAbsolute
 		                 ifTrue: [ location asFileReference ]
 		                 ifFalse: [ 
@@ -360,7 +396,6 @@ SMWorld >> startWorld: name at: location on: port [
 		                 / location ].
 	loggedInUsers := Dictionary new.
 	socketHandler := SMWebSocketHandler new muse: self.
-	counter := SMCounter new.
 	[ self loadWorld ]
 		on: Error
 		do: [ :ex | 
@@ -406,15 +441,15 @@ SMWorld >> user: user enterRoom: roomId on: socket [
 	| room |
 	user room: roomId.
 	room := rooms at: roomId.
-	self print: 'You have entered ' , room name with: 'message' on: socket.
+	self
+		print: 'You have entered ' , room longName
+		with: 'message'
+		on: socket.
 	(loggedInUsers select: [ :each | 
 		 each room = roomId & (each id ~= user id) ]) keysDo: [ :each | 
 		self print: user nick , ' has entered the room.' on: each ].
 	self print: room description on: socket.
-	room exits ifNotEmpty: [
-		
-		self print: room exitsAsString on: socket.
-		].
+	room exits ifNotEmpty: [ self print: room exitsAsString on: socket ]
 ]
 
 { #category : #handlers }

@@ -11,7 +11,6 @@ Class {
 	#name : #SMCounter,
 	#superclass : #Object,
 	#instVars : [
-		'lock',
 		'value'
 	],
 	#category : #SmallMuse
@@ -20,14 +19,10 @@ Class {
 { #category : #initialization }
 SMCounter >> initialize [
 	super initialize.
-	lock := Mutex new.
-	value := -1.
-
+	value := -1
 ]
 
 { #category : #initialization }
 SMCounter >> next [
-	lock critical: [ 
-		value := value + 1.
-		^ value ]
+	^ value := value + 1
 ]

@@ -27,12 +27,12 @@ SMWorldMock >> socketHandler [
 
 { #category : #accessing }
 SMWorldMock >> startWorld: name at: location on: port [
+	counter := SMCounter new.
 	homeDirectory := location asFileReference isAbsolute
 		ifTrue: [ location asFileReference ]
 		ifFalse:
 			[ FileLocator imageDirectory asFileReference / location ].
 	loggedInUsers := Dictionary new.
 	socketHandler := SMWebSocketMock new muse: self.
-	counter := SMCounter new.
 	self initWorld
 ]

@@ -97,6 +97,32 @@ SMWebSocketHandler >> print: message with: class on: socket [
 ]
 
 { #category : #printing }
+SMWebSocketHandler >> printRooms [
+	| output |
+	output := String streamContents: [ :out | 
+					out << '@rooms@'.
+		          muse rooms do: [ :each | 
+			          out << ('<li class"nick">{1}</li>' format: { 
+					           (each name) })]].
+	muse loggedInUsers keysDo: [ :each | 
+		lock critical: [ self class send: output to: { each } ]]
+
+]
+
+{ #category : #printing }
+SMWebSocketHandler >> printWho [
+	| output |
+	output := String streamContents: [ :out | 
+		          out << '@who@'.
+		          muse loggedInUsers do: [ :each | 
+			          out << ('<li class"nick">{1} ({2})</li>' format: { 
+					           each nick.
+					           (muse rooms at: each room) name }) ] ].
+	muse loggedInUsers keysDo: [ :each | 
+		lock critical: [ self class send: output to: { each } ] ]
+]
+
+{ #category : #printing }
 SMWebSocketHandler >> printWho: ignored on: socket [
 	| output |
 	output := String streamContents: [ :out | 
