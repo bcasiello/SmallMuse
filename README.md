@@ -41,7 +41,7 @@ For production, you'll need a location where Pharo has write access.
 
 ## Usage
 SMWorld is the main class that describes a SmallMuse world, so you start by creating one.
-You then send it the message startWorld:at:on:
+You then send it the message startWorld:&#8203;at:&#8203;on:
 The first argument is the name of the world; used in messages to users.
 The second is the location (directory) of the world file. If it's an absolute location, it's the full path to the directory. Otherwise, it's relative to the Smalltalk image path. The world file will be named world.ston in that directory. If the world file doesn't exist, one will be created with a tiny sample world. It is an error if the directory does not exist.
 
