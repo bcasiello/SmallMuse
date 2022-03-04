@@ -9,8 +9,7 @@ I don't have installation with dependencies via Iceberg working yet. Until I fig
 Metacello new
   repository: 'github://svenvc/zinc/repository';
   baseline: 'ZincHTTPComponents';
-  load.
-(Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
+  load: 'Zinc-WebSocket-Core'.
 ```
 
 ### Mustache templates
