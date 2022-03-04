@@ -6,10 +6,10 @@ I don't have installation with dependencies via Iceberg working yet. Until I fig
 
 ### Zinc WebSockets
 ```smalltalk
-Gofer new
-   smalltalkhubUser: 'SvenVanCaekenberghe' project: 'ZincHTTPComponents';
-   package: 'ConfigurationOfZincHTTPComponents';
-   load.
+Metacello new
+  repository: 'github://svenvc/zinc/repository';
+  baseline: 'ZincHTTPComponents';
+  load.
 (Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
 ```
 
@@ -47,6 +47,12 @@ The second is the location (directory) of the world file. If it's an absolute lo
 
 The third is the IP port you want to run on.
 
+Run the following in a playground to start the server
+
+```smalltalk
 | myWorld |
 myWorld := SMWorld new.
 myWorld startWorld: 'TestMuse' at: 'testmuse' on: 4242.
+```
+
+then visit [http://localhost:4242/smallmuse](http://localhost:4242/smallmuse).
