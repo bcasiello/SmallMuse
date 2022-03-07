@@ -9,6 +9,13 @@ Class {
 
 { #category : #baselines }
 BaselineOfSmallMuse >> baseline: spec [
+
 	<baseline>
-	spec for: #common do: [ spec package: 'SmallMuse' ]
+	spec for: #common do: [ 
+		spec
+			baseline: 'Mustache'
+			with: [ spec repository: 'github://noha/mustache:master/src' ];
+			baseline: 'TinyLogger'
+			with: [ spec repository: 'github://jecisc/TinyLogger:v1.x.x/src' ];
+			package: 'SmallMuse' ]
 ]
