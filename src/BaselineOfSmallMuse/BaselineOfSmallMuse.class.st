@@ -21,5 +21,6 @@ BaselineOfSmallMuse >> baseline: spec [
 			with: [ spec repository: 'github://noha/mustache:master/src' ];
 			baseline: 'TinyLogger'
 			with: [ spec repository: 'github://jecisc/TinyLogger:v1.x.x/src' ];
-			package: 'SmallMuse' ]
+			package: 'SmallMuse';
+			package: 'SmallMuse-Tests' ]
 ]
