@@ -14,7 +14,9 @@ BaselineOfSmallMuse >> baseline: spec [
 	spec for: #common do: [ 
 		spec
 			baseline: 'ZincHTTPComponents'
-  			with: [ spec repository: 'github://svenvc/zinc/repository/Zinc-WebSocket-Core.package' ];
+  			with: [ spec 
+				loads: 'WebSocket';
+				repository: 'github://svenvc/zinc/repository' ];
 			baseline: 'Mustache'
 			with: [ spec repository: 'github://noha/mustache:master/src' ];
 			baseline: 'TinyLogger'
