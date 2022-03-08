@@ -15,7 +15,6 @@ Class {
 	#name : #SMPortal,
 	#superclass : #Object,
 	#instVars : [
-		'from',
 		'to',
 		'direction'
 	],
@@ -49,7 +48,6 @@ SMPortal >> directionName [
 
 { #category : #accessing }
 SMPortal >> from: aRoom to: anotherRoom direction: aString [
-	from := aRoom id.
 	to := anotherRoom id.
 	direction := aString.
 	aRoom addExit: self.
