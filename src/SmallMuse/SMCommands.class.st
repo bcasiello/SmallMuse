@@ -159,7 +159,9 @@ SMCommands >> login: arguments on: socket [
 		^ muse sendPage: 'loginError.html' on: socket ].
 	nick := words at: 1.
 	password := words at: 2.
-	user := muse users detect: [ :aUser | aUser nick = nick ] ifNone: [^ muse sendPage: 'loginError.html' on: socket].
+	user := muse users detect: [ :aUser | aUser nick = nick ].
+	user ifNil: [
+		^ muse sendPage: 'loginError.html' on: socket].
 	salt := user salt.
 	hashedPassword := SMUser hash: password with: salt.
 	hashedPassword = user hashedPassword ifFalse: [ 
