@@ -29,7 +29,7 @@ SMRoom >> addExit: exit [
 
 { #category : #accessing }
 SMRoom >> contentsAsString [
-	String streamContents: [ :out | 
+	^ String streamContents: [ :out | 
 		contents ifNotEmpty: [ out << 'contents: ' ].
 		contents do: [ :each | 
 			out << 'object'.
