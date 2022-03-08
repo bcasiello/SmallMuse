@@ -22,9 +22,6 @@ Class {
 	#instVars : [
 		'level'
 	],
-	#classVars : [
-		'privileges'
-	],
 	#category : #SmallMuse
 }
 
