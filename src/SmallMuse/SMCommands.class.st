@@ -95,7 +95,7 @@ SMCommands class >> tokenize: aString [
 		"
 	result := (aString findTokens: Character separators escapedBy: '''"') 
 		          select: [ :each | each isNotEmpty ].
-	SMWorld logMessage: aString, ' was tokenized as ', result printString.
+	(aString, ' was tokenized as ', result printString) record.
 	^ result
 ]
 

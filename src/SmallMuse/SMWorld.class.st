@@ -78,11 +78,20 @@ Class {
 	#category : #SmallMuse
 }
 
-{ #category : #handlers }
-SMWorld class >> logMessage: aString [
-	ZnServerGenericLogEvent new
-		subject: self asString, ': ' , aString;
-		emit
+{ #category : #printing }
+SMWorld class >> printUTCDateAndTime: aDateTime on: aStream [
+	| utcDateTime |
+	"Print as per RFC 5424.
+	Based on BasicDatePrinter.
+	"
+
+	utcDateTime := aDateTime asUTC.
+	BasicDatePrinter default printYMD: utcDateTime withLeadingSpace: false on: aStream.
+	aStream nextPut: $T.
+	BasicDatePrinter default printHMS: utcDateTime separatedBy: $: on: aStream.
+	aStream nextPut: $..
+	utcDateTime nanoSecond / 1000000 printOn: aStream base: 10 length: 3 padded: true.
+	aStream nextPut: $Z.
 
 ]
 
@@ -91,10 +100,9 @@ SMWorld class >> shutdownAll [
 	3 timesRepeat: [ 
 		ZnServer managedServers do: [ :each | ZnServer unregister: each ].
 		ZnServer managedServers ifNotEmpty: [ 
-			self logMessage:
-				ZnServer managedServers size asString , ' instances left.' ] ].
+			(ZnServer managedServers size asString , ' instances left.') record ] ].
 	ZnServer managedServers ifEmpty: [ 
-		self logMessage: 'all instances shut down' ]
+		'all instances shut down' record ]
 ]
 
 { #category : #handlers }
@@ -151,12 +159,14 @@ SMWorld >> initWorld [
 
 { #category : #initialization }
 SMWorld >> initialize [
+
 	super initialize.
 	mutex := Mutex new.
 	users := Dictionary new.
 	rooms := Dictionary new.
 	commandParser := SMCommands new muse: self.
-	gravatars := false
+	gravatars := false.
+	
 ]
 
 { #category : #handlers }
@@ -164,7 +174,7 @@ SMWorld >> loadWorld [
 	| world in |
 	world := 	homeDirectory / 'world.ston'.
 	world exists ifFalse: [
-		self class logMessage: 'World file does not exist. Creating a new world!'.
+		'World file does not exist. Creating a new world!' record.
 		^ self initWorld].
 	in := world readStream.
 	counter := STON fromStream: in.
@@ -386,21 +396,33 @@ SMWorld >> setDelegates [
 		to: (ZnWebSocketDelegate map: 'ws-chatroom' to: socketHandler)
 ]
 
+{ #category : #initialization }
+SMWorld >> startLogger [
+	TinyLogger default removeAllLoggers.
+	TinyLogger default addFileLoggerNamed: homeDirectory / 'debug.log'.
+	TinyLogger default timestampFormatBlock: [ :aStream :timestamp | 
+		self class printUTCDateAndTime: timestamp on: aStream ].
+]
+
 { #category : #accessing }
 SMWorld >> startWorld: name at: location on: port [
+
 	counter := SMCounter new.
 	homeDirectory := location asFileReference isAbsolute
 		                 ifTrue: [ location asFileReference ]
 		                 ifFalse: [ 
 		                 FileLocator imageDirectory asFileReference
 		                 / location ].
+	
+	self startLogger.
+	'SmallMuse started' record.
+
 	loggedInUsers := Dictionary new.
 	socketHandler := SMWebSocketHandler new muse: self.
 	[ self loadWorld ]
 		on: Error
 		do: [ :ex | 
-			self class logMessage:
-				'ERROR - server not started - error reading world file: ' , ex description.
+					('ERROR - server not started - error reading world file: ', ex description) record.
 			^ self ].
 	ZnServer startDefaultOn: port.
 	ZnServer default loggingOff.

@@ -151,11 +151,11 @@ SMWebSocketHandler >> value: webSocket [
 	self register: webSocket.
 	muse sendPage: 'welcome.html' on: webSocket.
 	webSocket runWith: [ :message | 
-		SMWorld logMessage: 'Received message: ' , message printString.
+		('Received message: ' , message printString) record.
 		muse processMessage: message on: webSocket ] ]
 		on: NetworkError
 		do: [ 
-			SMWorld logMessage: 'Network error, cleaning up'.
+			'Network error, cleaning up' record.
 			muse logoff: webSocket.
 			self unregister: webSocket ]
 ]
