@@ -2,35 +2,13 @@
 A Multi-User Shared Environment in SmallTalk
 
 ## Installation
-I don't have installation with dependencies via Iceberg working yet. Until I figure that out, you must explicitly load the dependencies:
 
-### Zinc WebSockets
 ```smalltalk
 Metacello new
-  repository: 'github://svenvc/zinc/repository';
-  baseline: 'ZincHTTPComponents';
-  load: 'Zinc-WebSocket-Core'.
+  repository: 'github://bcasiello/SmallMuse:main';
+  baseline: 'SmallMuse';
+  load.
 ```
-
-### Mustache templates
-```smalltalk
-Gofer it
-   smalltalkhubUser: 'NorbertHartl' project: 'Mustache';
-   configuration;
-   loadStable.
-```
-
-### PetitParser
-#### Note: PetitParser is no longer used.
-```smalltalk
-Gofer new
-    renggli: 'petit'; 
-    package: 'PetitParser';
-    load.
-```
-
-### SmallMuse installation
-Now you can install SmallMuse via Iceberg, pointing it at this repository.
 
 ### Creating a world
 
