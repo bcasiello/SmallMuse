@@ -262,7 +262,7 @@ SMCommands >> register: arguments on: socket [
 	
 	Note: multiple nicks with the same email address are explicitly allowed."
 
-	| words nick email password user |
+	| words nick email password user id |
 	words := self class tokenize: arguments.
 	words size ~= 3 ifTrue: [ 
 		muse sendPage: 'registrationError.html' on: socket.
@@ -273,13 +273,14 @@ SMCommands >> register: arguments on: socket [
 	(muse users includesKey: nick) ifTrue: [ 
 		muse sendPage: 'nickInUse.html' on: socket.
 		^ nil ].
+	id := muse nextCounter.
 	user := SMUser new
-		        id: muse nextCounter
+		        id: id
 		        nick: nick
 		        email: email
 		        password: password
 					privilege: SMPrivilege user.
-	muse users at: nick put: user.
+	muse users at: id put: user.
 	self logout: '' on: socket. "Logout current user"
 	muse loginUser: user on: socket.
 	muse saveWorld
