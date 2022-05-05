@@ -5,7 +5,7 @@ A Multi-User Shared Environment in SmallTalk
 
 ```smalltalk
 Metacello new
-  repository: 'https://bcasiello/SmallMuse:main';
+  repository: 'github://bcasiello/SmallMuse:main';
   baseline: 'SmallMuse';
   load.
 ```
